@@ -8,7 +8,10 @@ let { postMessage } = require('./sql/postMessage');
 
 // Task D13
 function getAllMessages(db, req, res) {
-    db.all(`write your query here`, (err, rows) => {
+    db.all(`SELECT Messages.message, Users.friendlyname, datetime(Messages.created, "unixepoch") AS created
+        FROM Messages
+        inner join Users 
+        ON Messages.userid = Users.userid;`, (err, rows) => {
         if (err) {
             console.error(err.message);
         }
@@ -33,7 +36,7 @@ function organiseUsers(db, req, res) {
 // Task D12
 function createUser(db, req, res) {
     const { username, email, password } = req.body;
-    db.run(`write your query here`, [username, email, password],
+    db.run(`INSERT INTO Users (friendlyname, emailaddress, password, admin) VALUES (?, ?, ?, 0);`, [username, email, password],
       function(err) {
         if (err) {
           return console.log(err.message)
