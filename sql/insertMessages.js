@@ -5,7 +5,7 @@
 // their owner ensuring you also appropriately set the message’s initial archive state (where outlined in the test data).  
 
 const insertMessages = `
-INSERT INTO "Messages"(
+INSERT INTO Messages(
     message,
     userid,
     archive)
