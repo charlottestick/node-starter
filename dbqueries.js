@@ -5,6 +5,7 @@ let { updateSJobs } = require('./sql/updateSJobs');
 let { deleteOldMessages } = require('./sql/deleteOldMessages');
 let { archiveSteve } = require('./sql/archiveSteveJobs');
 let { postMessage } = require('./sql/postMessage');
+let { updateTS } = require("./sql/updateTS");
 
 // Task D13
 function getAllMessages(db, req, res) {
@@ -40,7 +41,7 @@ function createUser(db, req, res) {
       function(err) {
         if (err) {
           return console.log(err.message)
-    }
+        }
         console.log(`${username} added to user field at position ${this.lastID}`)
         userID = this.lastID
         console.log("created new user " + userID);
@@ -98,10 +99,23 @@ function postAMessage(db, req, res) {
       function(err) {
         if (err) {
           return console.log(err.message)
-    }
+        }
         const messg = `${userid} posted this ${message}`;
         res.send({ "ok":messg }).status(200);
     })
 }
 
-module.exports = { getAllMessages, organiseUsers, createUser, getFromFranklins, updateSteveJobs, deleteOldMess, archiveJobs, postAMessage }
+function updateTimeStamp(db, req, res) {
+    const {userid} = req.body;
+    db.run(updateTS, [userid],
+        function(err) {
+            if (err) {
+                return console.log(err.message)
+            }
+            const messg = `User ${userid}'s last login updated`;
+            res.send({ "ok":messg}).status(200);
+        }
+    )
+}
+
+module.exports = { getAllMessages, organiseUsers, createUser, getFromFranklins, updateSteveJobs, deleteOldMess, archiveJobs, postAMessage, updateTimeStamp }

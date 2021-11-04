@@ -101,6 +101,14 @@
     </form>
     <div id="show added message"></div>
 
+    <h2>D15 task. Update a users last login timestamp</h2>
+    <form id="update-timestamp-form">
+        <label for="userid-timestamp">User id:</label>
+        <input type="text" id="userid-timestamp" name="userid"><br>
+        <input type="submit" value="Update user's timestamp">
+    </form>
+    <div id="show-timestamp-updated"></div>
+
     <script>
         const buttongetAllMessages = document.querySelector('.getting-messages-form');
         buttongetAllMessages.addEventListener('submit', event => {
@@ -244,6 +252,22 @@
             .then(res => console.log("here is res", res))
             .catch((err) => console.log("error goes here",err));
     }); 
+
+    const formUpdateTimestamp = document.querySelector("#update-timestamp-form");
+    formUpdateTimestamp.addEventListener('submit', event => {
+        const userid = document.getElementById("userid-timestamp").value;
+        event.preventDefault();
+        let body = JSON.stringify({ userid });
+        fetch("/api/update-timestamp", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json"},
+            body,
+            credentials: "same-origin"
+        })
+        .then(res => res.json())
+        .then(res => document.getElementById('show-timestamp-updated').innerText=JSON.stringify(res.ok))
+        .catch((err) => console.log(err));
+    })
 
 
     </script>
