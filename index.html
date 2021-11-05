@@ -106,10 +106,22 @@
     <h2>D15 task. Update a users last login timestamp</h2>
     <form id="update-timestamp-form">
         <label for="userid-timestamp">User id:</label>
-        <input type="text" id="userid-timestamp" name="userid"><br>
+        <input type="text" id="userid-timestamp" name="userid-timestamp"><br>
         <input type="submit" value="Update user's timestamp">
     </form>
     <div id="show-timestamp-updated"></div>
+
+    <hr>
+
+    <h2>D16 task. Remove user message</h2>
+    <form id="remove-user-message">
+        <label for="message-to-remove">Message id:</label>
+        <input type="text" id="message-to-remove" name="message-to-remove"><br>
+        <label for="userid-of-message">User id of the message:</label>
+        <input type="text" id="userid-of-message" name="userid-of-message"><br>
+        <input type="submit" value="Remove message">
+    </form>
+    <div id="show-message-removed"></div>
 
     <script>
         const buttongetAllMessages = document.querySelector('.getting-messages-form');
@@ -271,6 +283,22 @@
         .catch((err) => console.log(err));
     })
 
+    const formRemoveUserMessage = document.querySelector("#remove-user-message");
+    formRemoveUserMessage.addEventListener("submit", event => {
+        const messageid = document.getElementById("message-to-remove").value;
+        const userid = document.getElementById("userid-of-message").value;
+        event.preventDefault();
+        let body = JSON.stringify({ messageid, userid });
+        fetch("/api/remove-user-message", {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"},
+            body,
+            credentials: "same-origin"
+        })
+        .then(res => res.json())
+        .then(res => document.getElementById('show-message-removed').innerText=JSON.stringify(res.ok))
+        .catch((err) => console.log(err));
+    })
 
     </script>
 

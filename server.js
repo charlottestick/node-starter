@@ -49,6 +49,11 @@ app.put("/api/update-timestamp", function(req, res) {
 }
 )
 
+app.delete("/api/remove-user-message", function(req, res) {
+    console.log("This is the req",req.body);
+    query.removeMessage(db,req,res);
+})
+
 app.listen(3000, function () {
     dba.init(db);
     console.log('Server is listening on port 3000. Ready to accept requests!');

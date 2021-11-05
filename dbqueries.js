@@ -6,6 +6,7 @@ let { deleteOldMessages } = require('./sql/deleteOldMessages');
 let { archiveSteve } = require('./sql/archiveSteveJobs');
 let { postMessage } = require('./sql/postMessage');
 let { updateTS } = require("./sql/updateTS");
+let { removeUserMessage } = require("./sql/removeUserMessage");
 
 // Task D13
 function getAllMessages(db, req, res) {
@@ -118,4 +119,17 @@ function updateTimeStamp(db, req, res) {
     )
 }
 
-module.exports = { getAllMessages, organiseUsers, createUser, getFromFranklins, updateSteveJobs, deleteOldMess, archiveJobs, postAMessage, updateTimeStamp }
+function removeMessage(db, req, res) {
+    const {messageid, userid} = req.body;
+    db.run(removeUserMessage, [messageid, userid],
+        function(err) {
+            if (err) {
+                return console.log(err.message)
+            }
+            const messg = `Message ${messageid} from user ${userid} removed`;
+            res.send({ "ok":messg}).status(200);
+        }
+    )
+}
+
+module.exports = { getAllMessages, organiseUsers, createUser, getFromFranklins, updateSteveJobs, deleteOldMess, archiveJobs, postAMessage, updateTimeStamp, removeMessage }
